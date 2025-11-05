@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weekly Q&A - Faculty Suggestions</title>
+  <meta charset="utf-8" />
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; max-width: 800px; }
+    .item { border-bottom: 1px solid #ccc; padding: 15px 0; }
+    .suggestion { font-weight: bold; }
+    .response { margin-top: 5px; color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Faculty Suggestions - Weekly Q&A</h1>
+  <div id="qa-list">Loading...</div>
+
+  <script>
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQyXNhGQjSU5z-dCpnV7LVQAZ1qEi13-mfdxkUzBmnUckWfRhJ8NOIzDCaWTiGW88s6L7kHeIQB7NRB/pub?gid=0&single=true&output=csv";
+
+    async function loadPublished() {
+      const response = await fetch(CSV_URL);
+      const csvText = await response.text();
+
+      // Convert CSV text into array of rows
+      const rows = csvText.trim().split("\n").map(r => r.split(","));
+
+      const headers = rows[0];
+      const publishedIndex = headers.indexOf("Published");
+      const suggestionIndex = headers.indexOf("Suggestion");
+      const responseIndex = headers.indexOf("AdminResponse");
+      const deptIndex = headers.indexOf("Department");
+
+      const container = document.getElementById("qa-list");
+      container.innerHTML = "";
+
+      rows.slice(1).forEach(row => {
+        if (row[publishedIndex] && row[publishedIndex].trim().toUpperCase() === "TRUE") {
+          const suggestion = row[suggestionIndex];
+          const adminResponse = row[responseIndex];
+          const dept = row[deptIndex];
+
+          const div = document.createElement("div");
+          div.className = "item";
+          div.innerHTML = `
+            <div class="suggestion">📩 <strong>${dept}</strong> - ${suggestion}</div>
+            <div class="response">💬 <em>${adminResponse || "No response yet"}</em></div>
+          `;
+          container.appendChild(div);
+        }
+      });
+
+      if (container.innerHTML === "") {
+        container.innerHTML = "<p>No published Q&A yet.</p>";
+      }
+    }
+
+    loadPublished();
+  </script>
+</body>
+</html>

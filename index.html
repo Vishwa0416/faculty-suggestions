@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Faculty Suggestions</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    /* Minimal styles — replace with your CSS or Tailwind if you prefer */
+    body { font-family: Arial, sans-serif; padding: 20px; max-width:700px; margin:auto; }
+    .step { display:none; }
+    .step.active { display:block; }
+    .btn { padding:10px 14px; border:none; background:#2c7; color:#fff; cursor:pointer; border-radius:6px; }
+    .btn.secondary { background:#777; }
+    label { display:block; margin:8px 0 4px; }
+    textarea { width:100%; min-height:120px; }
+    .popup { position:fixed; top:20px; right:20px; background:#222; color:#fff; padding:12px 16px; border-radius:6px; display:none; }
+  </style>
+</head>
+<body>
+
+  <h1>Faculty Suggestions</h1>
+  <div id="step1" class="step active">
+    <h3>Are you a Student or Teacher?</h3>
+    <button class="btn" onclick="chooseRole('Student')">Student</button>
+    <button class="btn" onclick="chooseRole('Teacher')">Teacher</button>
+  </div>
+
+  <div id="step2" class="step">
+    <h3>Select your department</h3>
+    <select id="department">
+      <option value="">-- Select department --</option>
+      <option>Department of Business Management</option>
+      <option>Department of Accountancy and Finance</option>
+      <option>Department of Marketing Management</option>
+      <option>Department of Tourism Management</option>
+      <option>Other</option>
+    </select>
+    <div style="margin-top:12px;">
+      <button class="btn secondary" onclick="goBack(1)">Back</button>
+      <button class="btn" onclick="nextStep()">Next</button>
+    </div>
+  </div>
+
+  <div id="step3" class="step">
+    <h3>Write your suggestion</h3>
+    <label for="senderEmail">Email (optional)</label>
+    <input id="senderEmail" placeholder="your email (optional)" style="width:100%; padding:8px;"/>
+    <label for="suggestion">Suggestion</label>
+    <textarea id="suggestion" placeholder="Type your suggestion..."></textarea>
+    <!-- Honeypot for bots -->
+    <input type="text" id="hp_field" style="display:none" />
+    <div style="margin-top:12px;">
+      <button class="btn secondary" onclick="goBack(2)">Back</button>
+      <button class="btn" onclick="submitSuggestion()">Send suggestion</button>
+    </div>
+  </div>
+
+  <div id="popup" class="popup"></div>
+
+<script>
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrNLqjGFgeeawQ9Q5RBisedVKbe5eY5mdv9Eo7SjNGSCtZzNCkqw4FDcxRkMoBbZy8Cw/exec";
+
+  let roleChosen = null;
+  function chooseRole(role) {
+    roleChosen = role;
+    showStep(2);
+  }
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+  }
+  function goBack(n) { showStep(n) }
+  function nextStep() {
+    const dept = document.getElementById('department').value;
+    if (!dept) { showPopup("Please choose a department", 3000); return; }
+    showStep(3);
+  }
+
+  function showPopup(msg, time=3000, success=true) {
+    const p = document.getElementById('popup');
+    p.style.display = 'block';
+    p.style.background = success ? "#2d7" : "#c44";
+    p.textContent = msg;
+    setTimeout(()=> p.style.display = 'none', time);
+  }
+
+  async function submitSuggestion() {
+    const suggestion = document.getElementById('suggestion').value.trim();
+    const dept = document.getElementById('department').value;
+    const senderEmail = document.getElementById('senderEmail').value.trim();
+    const hp = document.getElementById('hp_field').value;
+    if (hp) { showPopup("Spam detected", 4000, false); return; } // honeypot
+    if (!suggestion) { showPopup("Please type a suggestion", 3000, false); return; }
+    if (suggestion.length > 5000) { showPopup("Suggestion too long", 3000, false); return; }
+
+    showPopup("Sending...", 10000, true);
+
+    try {
+      const resp = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          role: roleChosen, department: dept, suggestion: suggestion, senderEmail: senderEmail
+        })
+      });
+      const j = await resp.json();
+      if (j.success) {
+        showPopup("Suggestion delivered — thank you!", 4000, true);
+        // reset form
+        document.getElementById('suggestion').value = "";
+        document.getElementById('senderEmail').value = "";
+        showStep(1);
+      } else {
+        showPopup("Delivery failed: " + (j.message||"unknown"), 5000, false);
+      }
+    } catch (err) {
+      showPopup("Network error. Try again.", 5000, false);
+      console.error(err);
+    }
+  }
+</script>
+
+</body>
+</html>
