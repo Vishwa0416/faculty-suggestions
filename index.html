@@ -85,40 +85,41 @@
   }
 
   async function submitSuggestion() {
-    const suggestion = document.getElementById('suggestion').value.trim();
-    const dept = document.getElementById('department').value;
-    const senderEmail = document.getElementById('senderEmail').value.trim();
-    const hp = document.getElementById('hp_field').value;
-    if (hp) { showPopup("Spam detected", 4000, false); return; } // honeypot
-    if (!suggestion) { showPopup("Please type a suggestion", 3000, false); return; }
-    if (suggestion.length > 5000) { showPopup("Suggestion too long", 3000, false); return; }
+  const suggestion = document.getElementById('suggestion').value.trim();
+  const dept = document.getElementById('department').value;
+  const senderEmail = document.getElementById('senderEmail').value.trim();
+  const hp = document.getElementById('hp_field').value;
 
-    showPopup("Sending...", 10000, true);
+  if (hp) { showPopup("Spam detected", 4000, false); return; } // honeypot
+  if (!suggestion) { showPopup("Please type a suggestion", 3000, false); return; }
+  if (suggestion.length > 5000) { showPopup("Suggestion too long", 3000, false); return; }
 
-    try {
-      const resp = await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          role: roleChosen, department: dept, suggestion: suggestion, senderEmail: senderEmail
-        })
-      });
-      const j = await resp.json();
-      if (j.success) {
-        showPopup("Suggestion delivered — thank you!", 4000, true);
-        // reset form
-        document.getElementById('suggestion').value = "";
-        document.getElementById('senderEmail').value = "";
-        showStep(1);
-      } else {
-        showPopup("Delivery failed: " + (j.message||"unknown"), 5000, false);
-      }
-    } catch (err) {
-      showPopup("Network error. Try again.", 5000, false);
-      console.error(err);
-    }
+  showPopup("Sending...", 3000, true);
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        role: roleChosen,
+        department: dept,
+        suggestion: suggestion,
+        senderEmail: senderEmail
+      })
+    });
+
+    showPopup("Suggestion delivered — thank you!", 4000, true);
+
+    document.getElementById('suggestion').value = "";
+    document.getElementById('senderEmail').value = "";
+    showStep(1);
+
+  } catch (err) {
+    console.error(err);
+    showPopup("Network error. Try again.", 5000, false);
   }
+}
 </script>
 
 </body>
