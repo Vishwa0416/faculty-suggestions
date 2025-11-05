@@ -98,6 +98,7 @@
     try {
       const resp = await fetch(APPS_SCRIPT_URL, {
         method: "POST",
+        mode: "no-cors",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           role: roleChosen, department: dept, suggestion: suggestion, senderEmail: senderEmail
