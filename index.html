@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Faculty Suggestions</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <span>Faculty Suggestion Portal</span>
+      </div>
+      <button
+        class="admin-btn"
+        onclick="window.location.href='admin-login.html'"
+      >
+        Admin Access
+      </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+      <button id="globalBackBtn" class="global-back" onclick="goBack(1)">
+        ← Back
+      </button>
+
+      <!-- Step 1: Role Selection -->
+      <div id="step1" class="step active">
+        <div class="hero">
+          <h1>Share Your Voice. Shape Our Faculty.</h1>
+          <p>
+            Submit your ideas and feedback to help us build a better learning
+            environment together.
+          </p>
+        </div>
+
+        <div class="role-selector">
+          <h3>I am a...</h3>
+          <div class="role-buttons">
+            <button class="btn-role" onclick="chooseRole('Student')">
+              University Student
+            </button>
+            <button class="btn-role" onclick="chooseRole('Teacher')">
+              Lecturer / Faculty Member
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Department Selection -->
+      <div id="step2" class="step">
+        <div class="dept-header">
+          <h2>Faculty Suggestion Portal</h2>
+          <p>Welcome. Please select your department to provide feedback.</p>
+        </div>
+
+        <div class="dept-grid">
+          <div
+            class="dept-card"
+            onclick="selectDept(this, 'Department of Business Management', '💼', 'business')"
+          >
+            <div class="dept-icon">💼</div>
+            <h3>Department of Business Management</h3>
+            <p>Provide feedback for Business Management</p>
+          </div>
+
+          <div
+            class="dept-card"
+            onclick="selectDept(this, 'Department of Accountancy and Finance', '💰', 'accountancy')"
+          >
+            <div class="dept-icon">💰</div>
+            <h3>Department of Accountancy and Finance</h3>
+            <p>Provide feedback for Accountancy and Finance</p>
+          </div>
+
+          <div
+            class="dept-card"
+            onclick="selectDept(this, 'Department of Marketing Management', '📢', 'marketing')"
+          >
+            <div class="dept-icon">📢</div>
+            <h3>Department of Marketing Management</h3>
+            <p>Provide feedback for Marketing Management</p>
+          </div>
+
+          <div
+            class="dept-card"
+            onclick="selectDept(this, 'Department of Tourism Management', '🌍', 'tourism')"
+          >
+            <div class="dept-icon">🌍</div>
+            <h3>Department of Tourism Management</h3>
+            <p>Provide feedback for Tourism Management</p>
+          </div>
+
+          <div
+            class="dept-card"
+            onclick="selectDept(this, 'Other', '⋯', 'other')"
+          >
+            <div class="dept-icon">⋯</div>
+            <h3>Other</h3>
+            <p>Provide feedback for other departments</p>
+          </div>
+        </div>
+
+        <div class="nav-buttons">
+          <button class="btn secondary" onclick="goBack(1)">Back</button>
+          <button class="btn" onclick="nextStep()">Next</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Suggestion Form -->
+      <div id="step3" class="step">
+        <div class="form-wrapper">
+          <div class="dept-banner">
+            <div class="dept-banner-icon" id="bannerIcon">💼</div>
+            <h2 id="bannerTitle">Department of Business Management</h2>
+            <p id="bannerSubtitle">Share your valuable feedback with us</p>
+            <span class="role-badge" id="roleBadge">Student</span>
+          </div>
+
+          <div class="form-container">
+            <h3>Write your suggestion</h3>
+
+            <div class="form-group">
+              <label for="senderEmail">
+                Email <span class="optional">(optional)</span>
+              </label>
+              <input
+                type="email"
+                id="senderEmail"
+                placeholder="your.email@example.com"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="suggestion">Your Suggestion</label>
+              <textarea
+                id="suggestion"
+                placeholder="Type your suggestion here... Share your thoughts, ideas, or feedback to help us improve."
+                maxlength="5000"
+                oninput="updateCharCount()"
+              ></textarea>
+              <div class="char-counter">
+                <span id="charCount">0</span> / 5000 characters
+              </div>
+            </div>
+
+            <!-- Honeypot for bots -->
+            <input
+              type="text"
+              id="hp_field"
+              style="display: none"
+              tabindex="-1"
+              autocomplete="off"
+            />
+
+            <div class="nav-buttons">
+              <button class="btn secondary" onclick="goBack(2)">Back</button>
+              <button class="btn" id="submitBtn" onclick="submitSuggestion()">
+                Send Suggestion
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <button class="btn secondary" onclick="openPopup('about-popup')">About</button>
+        <button class="btn secondary" onclick="openPopup('it-popup')">IT Support</button>
+      </div>
+      <p class="footer-copyright">
+        &copy; <span id="current-year"></span> Faculty Suggestion Portal. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+
+    <!-- About Popup -->
+    <div id="about-popup" class="popup-overlay">
+      <div class="popup-box">
+        <h2>About This Website</h2>
+        <p>
+          The Faculty Suggestion Portal allows students and staff to share ideas,
+          feedback, and improvements to enhance the faculty experience. Users can
+          submit suggestions anonymously or with their names, and the submissions
+          will be reviewed by the admin panel for implementation.
+        </p>
+        <button class="btn close-btn" onclick="closePopup('about-popup')">Close</button>
+      </div>
+    </div>
+
+    <!-- IT Support Popup -->
+    <div id="it-popup" class="popup-overlay">
+      <div class="popup-box">
+        <h2>IT Support</h2>
+        <p>
+          For any technical issues or inquiries, please contact the development team:
+        </p>
+        <ul>
+          <li><strong>Vishwa Wijesekare</strong> — araliyawijesakare@gmail.com</li>
+          <li><strong>Menath Nadungoda</strong> — binara@example.com</li>
+          <li><strong>Team Email:</strong> support@facultyportal.com</li>
+        </ul>
+        <button class="btn close-btn" onclick="closePopup('it-popup')">Close</button>
+      </div>
+    </div>
+
+
+    <!-- Popup Notification -->
+    <div id="popup" class="popup"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
