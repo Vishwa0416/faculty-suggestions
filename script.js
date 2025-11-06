@@ -228,4 +228,5 @@ function showStep(n) {
   }
 
   window.scrollTo({ top: 0, behavior: "smooth" });
+  
 }
