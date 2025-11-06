@@ -9,6 +9,8 @@ let roleChosen = null;
 let deptChosen = null;
 let deptIcon = null;
 let deptTheme = null;
+let stepHistory = [];
+
 
 const deptMessages = {
   "Department of Business Management":
@@ -71,9 +73,17 @@ function applyDepartmentTheme() {
   document.getElementById("roleBadge").textContent = roleChosen;
 }
 
-function goBack(n) {
-  showStep(n);
+function goBack() {
+  stepHistory.pop();
+  const prevStep = stepHistory.pop(); 
+
+  if (prevStep) {
+    showStep(prevStep);
+  } else {
+    showStep(1); 
+  }
 }
+
 
 function nextStep() {
   if (!deptChosen) {
@@ -207,26 +217,44 @@ window.onclick = function (event) {
   if (event.target === itPopup) itPopup.style.display = "none";
 };
 function showStep(n) {
-  document
-    .querySelectorAll(".step")
-    .forEach((s) => s.classList.remove("active"));
+  // Save current active step before switching
+  const current = document.querySelector(".step.active");
+  if (current) {
+    const currentId = parseInt(current.id.replace("step", ""));
+    if (stepHistory[stepHistory.length - 1] !== currentId) {
+      stepHistory.push(currentId);
+    }
+  }
+
+  // Switch steps
+  document.querySelectorAll(".step").forEach((s) => s.classList.remove("active"));
   document.getElementById("step" + n).classList.add("active");
 
-  // Update theme for step 3
+  // Apply theme if needed
   if (n === 3 && deptTheme) {
     applyDepartmentTheme();
-  } else if (n !== 3) {
+  } else {
     document.body.className = "";
   }
 
   // Show or hide global back button
   const backBtn = document.getElementById("globalBackBtn");
-  if (n === 1) {
-    backBtn.style.display = "none";
-  } else {
-    backBtn.style.display = "block";
-  }
+  backBtn.style.display = n === 1 ? "none" : "block";
 
   window.scrollTo({ top: 0, behavior: "smooth" });
-  
 }
+
+function goBack() {
+  // Remove current step from history
+  stepHistory.pop();
+
+  // Get previous step
+  const prevStep = stepHistory.pop();
+
+  if (prevStep) {
+    showStep(prevStep);
+  } else {
+    showStep(1); // fallback to home
+  }
+}
+
