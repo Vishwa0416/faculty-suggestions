@@ -3,7 +3,7 @@ const currentYear = new Date().getFullYear();
 document.getElementById("current-year").textContent = currentYear;
 
 const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyZjtSPR7h5TWg4bArC0Z818U_qjYzQeIaRnxalDTe7MIkyqSSd6QVTOc9Akuc8-PCwOg/exec";
+  "https://script.google.com/macros/s/AKfycbxEyQoGh0gn4nh7RAB9esq25-CpfByAnDU9eu_xwKbz_VW-JusSCSzkjK6rllYrXz3e/exec";
 
 let roleChosen = null;
 let deptChosen = null;
