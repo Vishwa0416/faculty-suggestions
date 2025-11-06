@@ -16,27 +16,22 @@ body {
 /* Department-specific themes */
 body.theme-business {
   background: linear-gradient(135deg, #3a7bd5 0%, #00d2ff 100%);
-  /* Vibrant bluish gradient */
 }
 
 body.theme-accountancy {
   background: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
-  /* Elegant reddish gradient */
 }
 
 body.theme-marketing {
   background: linear-gradient(135deg, #232526 0%, #414345 100%);
-  /* Professional blackish / dark gradient */
 }
 
 body.theme-tourism {
   background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-  /* Fresh greenish gradient */
 }
 
 body.theme-other {
   background: linear-gradient(135deg, #7f00ff 0%, #e100ff 100%);
-  /* Bold purpleish gradient */
 }
 
 
