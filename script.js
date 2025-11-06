@@ -3,7 +3,7 @@ const currentYear = new Date().getFullYear();
 document.getElementById("current-year").textContent = currentYear;
 
 const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbyZjtSPR7h5TWg4bArC0Z818U_qjYzQeIaRnxalDTe7MIkyqSSd6QVTOc9Akuc8-PCwOg/exec";
+  "https://script.google.com/macros/s/AKfycbxEyQoGh0gn4nh7RAB9esq25-CpfByAnDU9eu_xwKbz_VW-JusSCSzkjK6rllYrXz3e/exec";
 
 let roleChosen = null;
 let deptChosen = null;
@@ -28,16 +28,19 @@ function chooseRole(role) {
 }
 
 function selectDept(card, dept, icon, theme) {
-  // Remove selection from all cards
   document
     .querySelectorAll(".dept-card")
     .forEach((c) => c.classList.remove("selected"));
-  // Add selection to clicked card
+
   card.classList.add("selected");
   deptChosen = dept;
   deptIcon = icon;
   deptTheme = theme;
+
+  // Small delay for visual feedback
+  setTimeout(() => showStep(3), 300);
 }
+
 
 function showStep(n) {
   document
@@ -188,3 +191,41 @@ document.addEventListener(
   },
   false
 );
+//popup functions
+function openPopup(id) {
+  document.getElementById(id).style.display = "flex";
+}
+
+function closePopup(id) {
+  document.getElementById(id).style.display = "none";
+}
+
+window.onclick = function (event) {
+  const aboutPopup = document.getElementById("about-popup");
+  const itPopup = document.getElementById("it-popup");
+  if (event.target === aboutPopup) aboutPopup.style.display = "none";
+  if (event.target === itPopup) itPopup.style.display = "none";
+};
+function showStep(n) {
+  document
+    .querySelectorAll(".step")
+    .forEach((s) => s.classList.remove("active"));
+  document.getElementById("step" + n).classList.add("active");
+
+  // Update theme for step 3
+  if (n === 3 && deptTheme) {
+    applyDepartmentTheme();
+  } else if (n !== 3) {
+    document.body.className = "";
+  }
+
+  // Show or hide global back button
+  const backBtn = document.getElementById("globalBackBtn");
+  if (n === 1) {
+    backBtn.style.display = "none";
+  } else {
+    backBtn.style.display = "block";
+  }
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}

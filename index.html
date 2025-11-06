@@ -20,6 +20,10 @@
 
     <!-- Main Container -->
     <div class="container">
+      <button id="globalBackBtn" class="global-back" onclick="goBack(1)">
+        ← Back
+      </button>
+
       <!-- Step 1: Role Selection -->
       <div id="step1" class="step active">
         <div class="hero">
@@ -161,19 +165,49 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-      <div class="footer-content">
-        <div class="footer-links">
-          <a href="#about">About</a>
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#support">Contact IT Support</a>
-        </div>
-        <div class="footer-copyright">
-          © <span id="current-year"></span> Faculty of Management Studies |
-          Sabaragamuwa University of Sri Lanka. All Rights Reserved.
-        </div>
+    <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-links">
+        <button class="btn secondary" onclick="openPopup('about-popup')">About</button>
+        <button class="btn secondary" onclick="openPopup('it-popup')">IT Support</button>
+      </div>
+      <p class="footer-copyright">
+        &copy; <span id="current-year"></span> Faculty Suggestion Portal. All rights reserved.
+      </p>
+    </div>
+  </footer>
+
+
+    <!-- About Popup -->
+    <div id="about-popup" class="popup-overlay">
+      <div class="popup-box">
+        <h2>About This Website</h2>
+        <p>
+          The Faculty Suggestion Portal allows students and staff to share ideas,
+          feedback, and improvements to enhance the faculty experience. Users can
+          submit suggestions anonymously or with their names, and the submissions
+          will be reviewed by the admin panel for implementation.
+        </p>
+        <button class="btn close-btn" onclick="closePopup('about-popup')">Close</button>
       </div>
     </div>
+
+    <!-- IT Support Popup -->
+    <div id="it-popup" class="popup-overlay">
+      <div class="popup-box">
+        <h2>IT Support</h2>
+        <p>
+          For any technical issues or inquiries, please contact the development team:
+        </p>
+        <ul>
+          <li><strong>Vishwa Wijesekare</strong> — araliyawijesakare@gmail.com</li>
+          <li><strong>Menath Nadungoda</strong> — binara@example.com</li>
+          <li><strong>Team Email:</strong> support@facultyportal.com</li>
+        </ul>
+        <button class="btn close-btn" onclick="closePopup('it-popup')">Close</button>
+      </div>
+    </div>
+
 
     <!-- Popup Notification -->
     <div id="popup" class="popup"></div>
