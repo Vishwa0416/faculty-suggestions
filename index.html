@@ -23,11 +23,13 @@
 
     <!-- Main Container -->
     <div class="container">
-      <button id="globalBackBtn" class="global-back" onclick="goBack()">← Back</button>
+      <button id="globalBackBtn" class="global-back" onclick="goBack()">
+        ← Back
+      </button>
 
-
-      <!-- Step 1: Role Selection -->
+      <!-- Step 1: Home Page -->
       <div id="step1" class="step active">
+        <!-- Hero Section -->
         <div class="hero">
           <h1>Share Your Voice. Shape Our Faculty.</h1>
           <p>
@@ -36,15 +38,151 @@
           </p>
         </div>
 
-        <div class="role-selector">
-          <h3>I am a...</h3>
-          <div class="role-buttons">
-            <button class="btn-role" onclick="chooseRole('Student')">
-              University Student
+        <!-- Main Actions Grid -->
+        <div class="home-grid">
+          <!-- Submit Suggestion Card -->
+          <div class="home-card submit-card">
+            <div class="card-icon">✍️</div>
+            <h3>Submit New Suggestion</h3>
+            <p>Share your feedback with the faculty anonymously or publicly</p>
+            <div class="role-buttons">
+              <button class="btn-role" onclick="chooseRole('Student')">
+                👨‍🎓 I'm a Student
+              </button>
+              <button class="btn-role" onclick="chooseRole('Teacher')">
+                👨‍🏫 I'm a Lecturer
+              </button>
+            </div>
+          </div>
+
+          <!-- Track Suggestion Card -->
+          <div class="home-card track-card">
+            <div class="card-icon">🔍</div>
+            <h3>Track Your Suggestion</h3>
+            <p>Check the status and admin response for your submission</p>
+
+            <div class="track-options">
+              <div class="track-option">
+                <label>By Tracking ID (Anonymous)</label>
+                <div class="track-input-group">
+                  <input
+                    type="text"
+                    id="trackingIdInput"
+                    placeholder="e.g., LU1WVZO-B6HU"
+                    maxlength="20"
+                  />
+                  <button class="btn-track" onclick="searchByTrackingId()">
+                    Search
+                  </button>
+                </div>
+              </div>
+
+              <div class="divider-text">OR</div>
+
+              <div class="track-option">
+                <label>By Email Address</label>
+                <div class="track-input-group">
+                  <input
+                    type="email"
+                    id="emailInput"
+                    placeholder="your.email@example.com"
+                  />
+                  <button class="btn-track" onclick="searchByEmail()">
+                    Search
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Generate Report Card -->
+          <div class="home-card report-card">
+            <div class="card-icon">📊</div>
+            <h3>Download Report</h3>
+            <p>View and download admin responses with custom filters</p>
+
+            <button class="btn-expand-filters" onclick="toggleFilters()">
+              <span id="filterToggleText">Show Filters</span>
+              <span id="filterToggleIcon">▼</span>
             </button>
-            <button class="btn-role" onclick="chooseRole('Teacher')">
-              Lecturer / Faculty Member
+
+            <div
+              class="filters-wrapper"
+              id="filtersWrapper"
+              style="display: none"
+            >
+              <div class="filters-container">
+                <!-- Department Filter -->
+                <div class="filter-group">
+                  <label for="filterDepartment">
+                    <span class="filter-icon">🏢</span> Department
+                  </label>
+                  <select id="filterDepartment" class="filter-select">
+                    <option value="all">All Departments</option>
+                    <option value="Department of Business Management">
+                      Business Management
+                    </option>
+                    <option value="Department of Accountancy and Finance">
+                      Accountancy & Finance
+                    </option>
+                    <option value="Department of Marketing Management">
+                      Marketing Management
+                    </option>
+                    <option value="Department of Tourism Management">
+                      Tourism Management
+                    </option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+
+                <!-- Date Range Filter -->
+                <div class="filter-group">
+                  <label for="filterDateFrom">
+                    <span class="filter-icon">📅</span> From Date
+                  </label>
+                  <input type="date" id="filterDateFrom" class="filter-input" />
+                </div>
+
+                <div class="filter-group">
+                  <label for="filterDateTo">
+                    <span class="filter-icon">📅</span> To Date
+                  </label>
+                  <input type="date" id="filterDateTo" class="filter-input" />
+                </div>
+
+                <!-- Response Type Filter -->
+                <div class="filter-group">
+                  <label for="filterType">
+                    <span class="filter-icon">📝</span> Type
+                  </label>
+                  <select id="filterType" class="filter-select">
+                    <option value="all">All Responses</option>
+                    <option value="public">Public Only</option>
+                    <option value="anonymous">Anonymous Only</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="filter-actions">
+                <button class="btn-reset-filters" onclick="resetFilters()">
+                  🔄 Reset
+                </button>
+              </div>
+            </div>
+
+            <button class="btn-download-report" onclick="downloadReport()">
+              📄 Download Report (PDF)
             </button>
+
+            <!-- Divider with Tip -->
+            <div class="report-divider">
+              <span>TIP</span>
+            </div>
+
+            <p class="report-tip">
+              💡 To download the full report with all responses, leave the
+              filters empty or reset them before downloading.
+            </p>
           </div>
         </div>
       </div>
@@ -52,8 +190,8 @@
       <!-- Step 2: Department Selection -->
       <div id="step2" class="step">
         <div class="dept-header">
-          <h2>Faculty Suggestion Portal</h2>
-          <p>Welcome. Please select your department to provide feedback.</p>
+          <h2>Select Your Department</h2>
+          <p>Choose the department your feedback is related to</p>
         </div>
 
         <div class="dept-grid">
@@ -62,8 +200,8 @@
             onclick="selectDept(this, 'Department of Business Management', '💼', 'business')"
           >
             <div class="dept-icon">💼</div>
-            <h3>Department of Business Management</h3>
-            <p>Provide feedback for Business Management</p>
+            <h3>Business Management</h3>
+            <p>Business education and management practices</p>
           </div>
 
           <div
@@ -71,8 +209,8 @@
             onclick="selectDept(this, 'Department of Accountancy and Finance', '💰', 'accountancy')"
           >
             <div class="dept-icon">💰</div>
-            <h3>Department of Accountancy and Finance</h3>
-            <p>Provide feedback for Accountancy and Finance</p>
+            <h3>Accountancy & Finance</h3>
+            <p>Financial education and accountancy programs</p>
           </div>
 
           <div
@@ -80,8 +218,8 @@
             onclick="selectDept(this, 'Department of Marketing Management', '📢', 'marketing')"
           >
             <div class="dept-icon">📢</div>
-            <h3>Department of Marketing Management</h3>
-            <p>Provide feedback for Marketing Management</p>
+            <h3>Marketing Management</h3>
+            <p>Marketing curriculum and industry connections</p>
           </div>
 
           <div
@@ -89,8 +227,8 @@
             onclick="selectDept(this, 'Department of Tourism Management', '🌍', 'tourism')"
           >
             <div class="dept-icon">🌍</div>
-            <h3>Department of Tourism Management</h3>
-            <p>Provide feedback for Tourism Management</p>
+            <h3>Tourism Management</h3>
+            <p>Tourism and hospitality education</p>
           </div>
 
           <div
@@ -99,14 +237,14 @@
           >
             <div class="dept-icon">⋯</div>
             <h3>Other</h3>
-            <p>Provide feedback for other departments</p>
+            <p>General feedback or other departments</p>
           </div>
         </div>
 
-        <div class="nav-buttons">
+        <!-- <div class="nav-buttons">
           <button class="btn secondary" onclick="goBack(1)">Back</button>
           <button class="btn" onclick="nextStep()">Next</button>
-        </div>
+        </div> -->
       </div>
 
       <!-- Step 3: Suggestion Form -->
@@ -146,6 +284,24 @@
               </div>
             </div>
 
+            <!-- Anonymous Submission Checkbox -->
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input
+                  type="checkbox"
+                  id="anonymousCheck"
+                  onchange="toggleAnonymous()"
+                />
+                <span class="checkbox-text">
+                  <strong>Submit Anonymously</strong>
+                  <span class="checkbox-desc"
+                    >Your identity will be hidden. You'll receive a unique
+                    tracking ID.</span
+                  >
+                </span>
+              </label>
+            </div>
+
             <!-- Honeypot for bots -->
             <input
               type="text"
@@ -156,7 +312,7 @@
             />
 
             <div class="nav-buttons">
-              <button class="btn secondary" onclick="goBack(2)">Back</button>
+              <!-- <button class="btn secondary" onclick="goBack(2)">Back</button> -->
               <button class="btn" id="submitBtn" onclick="submitSuggestion()">
                 Send Suggestion
               </button>
@@ -168,30 +324,41 @@
 
     <!-- Footer -->
     <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-links">
-        <button class="btn secondary" onclick="openPopup('about-popup')">About</button>
-        <button class="btn secondary" onclick="openPopup('it-popup')">IT Support</button>
+      <div class="footer-content">
+        <div class="footer-links">
+          <button class="btn secondary" onclick="openPopup('about-popup')">
+            About
+          </button>
+          <button class="btn secondary" onclick="openPopup('it-popup')">
+            IT Support
+          </button>
+        </div>
+        <p class="footer-copyright">
+          &copy; <span id="current-year"></span> Faculty Suggestion Portal. All
+          rights reserved.
+        </p>
       </div>
-      <p class="footer-copyright">
-        &copy; <span id="current-year"></span> Faculty Suggestion Portal. All rights reserved.
-      </p>
-    </div>
-  </footer>
-
+    </footer>
 
     <!-- About Popup -->
     <div id="about-popup" class="popup-overlay">
       <div class="popup-box">
         <h2>About This Website</h2>
         <p>
-          The Faculty Suggestions platform is a digital alternative to traditional physical suggestion boxes used in the Faculty of Management Studies. 
-          It allows students, lecturers, and staff to conveniently share their ideas, feedback, or concerns from any device. 
-          By scanning the QR code displayed on notice boards or visiting the website link, users can easily access the suggestion form. 
-          Simply select your department, type your suggestion, and click “Send Suggestion.” 
-          Your feedback will be automatically directed to the relevant Head of Department’s inbox, ensuring your voice is heard quickly and efficiently.
+          The Faculty Suggestions platform is a digital alternative to
+          traditional physical suggestion boxes used in the Faculty of
+          Management Studies. It allows students, lecturers, and staff to
+          conveniently share their ideas, feedback, or concerns from any device.
+          By scanning the QR code displayed on notice boards or visiting the
+          website link, users can easily access the suggestion form. Simply
+          select your department, type your suggestion, and click "Send
+          Suggestion." Your feedback will be automatically directed to the
+          relevant Head of Department's inbox, ensuring your voice is heard
+          quickly and efficiently.
         </p>
-        <button class="btn close-btn" onclick="closePopup('about-popup')">Close</button>
+        <button class="btn close-btn" onclick="closePopup('about-popup')">
+          Close
+        </button>
       </div>
     </div>
 
@@ -200,15 +367,64 @@
       <div class="popup-box">
         <h2>IT Support</h2>
         <p>
-          For any technical issues or inquiries, please contact the development team:
+          For any technical issues or inquiries, please contact the development
+          team:
         </p>
         <ul>
-          <li><strong>Vishwa Wijesekare</strong> — araliyawijesakare@gmail.com</li>
+          <li>
+            <strong>Vishwa Wijesekare</strong> — araliyawijesakare@gmail.com
+          </li>
           <li><strong>Menath Nadungoda</strong> — nadungmenath1@gmail.com</li>
-        <button class="btn close-btn" onclick="closePopup('it-popup')">Close</button>
+        </ul>
+        <button class="btn close-btn" onclick="closePopup('it-popup')">
+          Close
+        </button>
       </div>
     </div>
 
+    <!-- Anonymous ID Popup -->
+    <div id="anonymous-popup" class="popup-overlay">
+      <div class="popup-box anonymous-success">
+        <div class="success-icon">✅</div>
+        <h2>Suggestion Submitted Anonymously</h2>
+        <p>Your suggestion has been submitted successfully!</p>
+        <div class="tracking-id-box">
+          <p class="tracking-label">Your Tracking ID:</p>
+          <p class="tracking-id" id="trackingId">XXXX-XXXX-XXXX</p>
+          <button class="btn-copy" onclick="copyTrackingId()">
+            📋 Copy ID
+          </button>
+        </div>
+        <p class="tracking-info">
+          Save this ID to track the admin response to your suggestion. You can
+          search for it on the homepage.
+        </p>
+        <button class="btn close-btn" onclick="closeAnonymousPopup()">
+          Close
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Results Popup -->
+    <div id="search-results-popup" class="popup-overlay">
+      <div class="popup-box search-results-box">
+        <h2 id="searchResultsTitle">Search Results</h2>
+        <div id="searchResultsContent" class="search-results-content">
+          <!-- Results will be inserted here -->
+        </div>
+        <div class="search-actions">
+          <button class="btn" onclick="downloadSearchResults()">
+            📄 Download as PDF
+          </button>
+          <button
+            class="btn secondary"
+            onclick="closePopup('search-results-popup')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
 
     <!-- Popup Notification -->
     <div id="popup" class="popup"></div>
