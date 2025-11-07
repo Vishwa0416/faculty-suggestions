@@ -7,6 +7,7 @@ const ADMIN_ACCOUNTS = [
     role: "Head of Department",
     department: "Department of Business Management",
     name: "HOD - Business Management",
+    accessLevel: "department", // Can only see own department
   },
   {
     id: 2,
@@ -15,6 +16,7 @@ const ADMIN_ACCOUNTS = [
     role: "Head of Department",
     department: "Department of Accountancy and Finance",
     name: "HOD - Accountancy & Finance",
+    accessLevel: "department",
   },
   {
     id: 3,
@@ -23,6 +25,7 @@ const ADMIN_ACCOUNTS = [
     role: "Head of Department",
     department: "Department of Marketing Management",
     name: "HOD - Marketing Management",
+    accessLevel: "department",
   },
   {
     id: 4,
@@ -31,6 +34,7 @@ const ADMIN_ACCOUNTS = [
     role: "Head of Department",
     department: "Department of Tourism Management",
     name: "HOD - Tourism Management",
+    accessLevel: "department",
   },
   {
     id: 5,
@@ -39,6 +43,16 @@ const ADMIN_ACCOUNTS = [
     role: "Assistant Registrar",
     department: "Faculty of Management Studies",
     name: "Assistant Registrar",
+    accessLevel: "all", // Can see all departments
+  },
+  {
+    id: 6,
+    username: "superadmin@mgt.sab.ac.lk",
+    password: "SuperAdmin@FMS2024",
+    role: "Super Administrator",
+    department: "Faculty of Management Studies",
+    name: "Super Administrator",
+    accessLevel: "superadmin", // Can see all but read-only
   },
 ];
 
@@ -46,12 +60,10 @@ const ADMIN_ACCOUNTS = [
 function checkExistingSession() {
   const adminData = sessionStorage.getItem("adminSession");
   if (adminData) {
-    // Redirect to admin dashboard
     window.location.href = "admin-dashboard.html";
   }
 }
 
-// Call on page load
 checkExistingSession();
 
 // Handle login form submission
@@ -63,68 +75,53 @@ function handleLogin(event) {
   const loginBtn = document.getElementById("loginBtn");
   const errorMessage = document.getElementById("errorMessage");
 
-  // Clear previous error
   errorMessage.classList.remove("show");
   errorMessage.textContent = "";
 
-  // Validate inputs
   if (!username || !password) {
     showError("Please enter both username and password");
     return;
   }
 
-  // Show loading state
   loginBtn.disabled = true;
   loginBtn.textContent = "Logging in...";
   loginBtn.classList.add("loading");
 
-  // Simulate network delay for better UX
   setTimeout(() => {
-    // Find matching admin account
     const admin = ADMIN_ACCOUNTS.find(
       (acc) => acc.username === username && acc.password === password
     );
 
     if (admin) {
-      // Successful login
       const sessionData = {
         id: admin.id,
         username: admin.username,
         role: admin.role,
         department: admin.department,
         name: admin.name,
+        accessLevel: admin.accessLevel,
         loginTime: new Date().toISOString(),
       };
 
-      // Store session data
       sessionStorage.setItem("adminSession", JSON.stringify(sessionData));
       localStorage.setItem("lastLogin", new Date().toISOString());
 
-      // Log activity
       logLoginActivity(admin);
-
-      // Show success message
       showSuccess("Login successful! Redirecting...");
 
-      // Redirect to admin dashboard
       setTimeout(() => {
         window.location.href = "admin-dashboard.html";
       }, 1000);
     } else {
-      // Failed login
       loginBtn.disabled = false;
       loginBtn.textContent = "Login";
       loginBtn.classList.remove("loading");
-
       showError("Invalid username or password. Please try again.");
-
-      // Log failed attempt
       logFailedAttempt(username);
     }
   }, 1000);
 }
 
-// Show error message
 function showError(message) {
   const errorMessage = document.getElementById("errorMessage");
   errorMessage.textContent = message;
@@ -134,7 +131,6 @@ function showError(message) {
   errorMessage.style.borderColor = "#fcc";
 }
 
-// Show success message
 function showSuccess(message) {
   const errorMessage = document.getElementById("errorMessage");
   errorMessage.textContent = message;
@@ -144,7 +140,6 @@ function showSuccess(message) {
   errorMessage.style.borderColor = "#cfc";
 }
 
-// Toggle password visibility
 function togglePassword() {
   const passwordInput = document.getElementById("password");
   const eyeIcon = document.getElementById("eyeIcon");
@@ -165,20 +160,15 @@ function togglePassword() {
   }
 }
 
-// Show forgot password modal
 function showForgotPassword(event) {
   event.preventDefault();
-  const modal = document.getElementById("forgotPasswordModal");
-  modal.classList.add("show");
+  document.getElementById("forgotPasswordModal").classList.add("show");
 }
 
-// Close forgot password modal
 function closeForgotPassword() {
-  const modal = document.getElementById("forgotPasswordModal");
-  modal.classList.remove("show");
+  document.getElementById("forgotPasswordModal").classList.remove("show");
 }
 
-// Close modal when clicking outside
 window.onclick = function (event) {
   const modal = document.getElementById("forgotPasswordModal");
   if (event.target === modal) {
@@ -186,7 +176,6 @@ window.onclick = function (event) {
   }
 };
 
-// Log successful login activity
 function logLoginActivity(admin) {
   const loginHistory = JSON.parse(localStorage.getItem("loginHistory")) || [];
   loginHistory.push({
@@ -196,14 +185,12 @@ function logLoginActivity(admin) {
     timestamp: new Date().toISOString(),
     success: true,
   });
-  // Keep only last 50 entries
   if (loginHistory.length > 50) {
     loginHistory.shift();
   }
   localStorage.setItem("loginHistory", JSON.stringify(loginHistory));
 }
 
-// Log failed login attempt
 function logFailedAttempt(username) {
   const failedAttempts =
     JSON.parse(localStorage.getItem("failedAttempts")) || [];
@@ -211,27 +198,22 @@ function logFailedAttempt(username) {
     username: username,
     timestamp: new Date().toISOString(),
   });
-  // Keep only last 50 entries
   if (failedAttempts.length > 50) {
     failedAttempts.shift();
   }
   localStorage.setItem("failedAttempts", JSON.stringify(failedAttempts));
 }
 
-// Keyboard shortcuts
 document.addEventListener("keydown", function (event) {
-  // Close modal with Escape key
   if (event.key === "Escape") {
     closeForgotPassword();
   }
 });
 
-// Auto-focus username field on page load
 window.addEventListener("load", function () {
   document.getElementById("username").focus();
 });
 
-// Prevent form submission on Enter in username field (UX improvement)
 document.getElementById("username").addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
     e.preventDefault();
@@ -239,7 +221,6 @@ document.getElementById("username").addEventListener("keypress", function (e) {
   }
 });
 
-// Clear error message when user starts typing
 document.getElementById("username").addEventListener("input", function () {
   const errorMessage = document.getElementById("errorMessage");
   if (errorMessage.classList.contains("show")) {
@@ -254,9 +235,10 @@ document.getElementById("password").addEventListener("input", function () {
   }
 });
 
-// Console log for development (remove in production)
 console.log("Admin Login System Initialized");
 console.log("Available Admin Accounts:");
 ADMIN_ACCOUNTS.forEach((admin) => {
-  console.log(`- ${admin.name} (${admin.username})`);
+  console.log(
+    `- ${admin.name} (${admin.username}) - Access: ${admin.accessLevel}`
+  );
 });

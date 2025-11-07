@@ -109,7 +109,8 @@ function applyDepartmentTheme() {
   document.getElementById("bannerTitle").textContent = deptChosen;
   document.getElementById("bannerSubtitle").textContent =
     deptMessages[deptChosen] || "Share your valuable feedback with us";
-  document.getElementById("roleBadge").textContent = roleChosen;
+  document.getElementById("roleBadge").textContent =
+    roleChosen === "Teacher" ? "Lecturer" : roleChosen;
 }
 
 function nextStep() {

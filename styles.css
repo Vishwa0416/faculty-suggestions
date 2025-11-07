@@ -1892,6 +1892,7 @@ textarea {
   position: relative;
   padding: 20px 0 12px 0;
   margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .report-divider::before,
