@@ -159,7 +159,7 @@ body {
 .apply-filters-btn {
   width: 100%;
   padding: 12px;
-  background: #4a90e2;
+  background: #6b7280;
   color: white;
   border: none;
   border-radius: 8px;
@@ -171,7 +171,7 @@ body {
 }
 
 .apply-filters-btn:hover {
-  background: #357abd;
+  background: #4b5563;
 }
 
 /* Main Content */
@@ -308,18 +308,39 @@ body {
 .suggestion-item {
   padding: 16px;
   background: #fafbfc;
-  border: 2px solid transparent;
+  border: 2px solid #dddddd;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.3s;
+  position: relative;
 }
 
-.suggestion-item:hover {
+/* Super Admin - Department colored left border */
+.suggestion-item[data-dept-color] {
+  border-left-width: 4px;
+}
+
+.suggestion-item[data-dept-color]:hover {
+  background: linear-gradient(90deg, var(--dept-hover-bg) 0%, #fafbfc 100%);
+  border-color: var(--dept-border-color);
+  border-left-color: var(--dept-border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.suggestion-item[data-dept-color].active {
+  background: linear-gradient(90deg, var(--dept-active-bg) 0%, #f0f7ff 100%);
+  border-color: var(--dept-border-color);
+  border-left-color: var(--dept-border-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Non-Super Admin hover states */
+.suggestion-item:not([data-dept-color]):hover {
   background: #f0f7ff;
   border-color: #4a90e2;
 }
 
-.suggestion-item.active {
+.suggestion-item:not([data-dept-color]).active {
   background: #e8f4ff;
   border-color: #4a90e2;
 }
@@ -329,6 +350,17 @@ body {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+}
+
+.suggestion-header-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.suggestion-time {
+  margin-left: auto; /* This ensures it stays right-aligned */
+  flex-shrink: 0;
 }
 
 .suggestion-dept {
@@ -354,7 +386,15 @@ body {
   overflow: hidden;
 }
 
-/* Status Badges */
+/* Status Badges Group - All badges in one line */
+.status-badges-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Status Badge - Original Style for All Badges */
 .status-badge {
   display: inline-block;
   padding: 4px 12px;
@@ -363,14 +403,98 @@ body {
   font-weight: 600;
 }
 
+/* Status: New - Change to a distinct blue */
 .status-badge.new {
   background: #dbeafe;
   color: #1e40af;
 }
 
+/* Status: Responded - Keep green but make it more vibrant */
 .status-badge.responded {
   background: #d1fae5;
   color: #065f46;
+}
+
+/* User Type Badge - Split into two: Student and Lecturer */
+/* Student Badge - Purple */
+/* Student Badge - Purple with stronger contrast */
+.status-badge.user-type.student {
+  background: #ddd6fe;
+  color: #6b21a8;
+  border: 1px solid #c4b5fd;
+  font-weight: 600;
+}
+
+/* Lecturer Badge - Orange with Strong Contrast */
+.status-badge.user-type.lecturer,
+.status-badge.user-type.teacher {
+  background: #fed7aa;
+  color: #9a3412;
+  border: 1px solid #fb923c;
+  font-weight: 600;
+}
+
+/* Privacy Badge - Anonymous - Yellow/Amber */
+.status-badge.privacy.anonymous {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+  font-weight: 600;
+}
+
+/* Privacy Badge - Public - Green/Teal */
+.status-badge.privacy.public {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #86efac;
+  font-weight: 600;
+}
+
+/* Suggestion Footer - Keep Original Layout */
+.suggestion-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.responded-by {
+  font-size: 11px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Super Admin Notice */
+.superadmin-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fffbeb;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* Response Info */
+.response-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #166534;
+}
+
+.response-info svg {
+  flex-shrink: 0;
 }
 
 /* Detail Section */
@@ -527,6 +651,159 @@ body {
   background: #94a3b8;
 }
 
+/* Super Admin Notice */
+.superadmin-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fffbeb;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* Response Info */
+.response-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #166534;
+}
+
+.response-info svg {
+  flex-shrink: 0;
+}
+
+/* Suggestion Footer */
+.suggestion-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.responded-by {
+  font-size: 11px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Suggestion Labels */
+.suggestion-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+/* Label Badges */
+.label-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Student Label Badge */
+.user-type-badge.student {
+  background: #e9d5ff;
+  color: #6b21a8;
+  border: 1px solid #d8b4fe;
+}
+
+/* Lecturer Label Badge */
+.user-type-badge.lecturer {
+  background: #fed7aa;
+  color: #c2410c;
+  border: 1px solid #fdba74;
+}
+
+/* Privacy Badges */
+.privacy-badge.anonymous {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.privacy-badge.public {
+  background: #ccfbf1;
+  color: #115e59;
+  border: 1px solid #99f6e4;
+}
+
+/* Super Admin Notice */
+.superadmin-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #fffbeb;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #92400e;
+  font-weight: 500;
+}
+
+/* Response Info */
+.response-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #f0fdf4;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #166534;
+}
+
+.response-info svg {
+  flex-shrink: 0;
+}
+
+/* Suggestion Footer */
+.suggestion-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.responded-by {
+  font-size: 11px;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .suggestion-labels {
+    gap: 4px;
+  }
+
+  .label-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
 /* Responsive Design */
 @media (max-width: 1400px) {
   .main-content {
@@ -601,5 +878,26 @@ body {
   .sort-btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Logout Popup Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
