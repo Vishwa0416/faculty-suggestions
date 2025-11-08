@@ -32,21 +32,6 @@ The **Faculty Suggestions** web application is a simple and efficient digital pl
 6. Your message will be securely sent to the department head’s inbox via the integrated Google Apps Script.
 
 ---
-
-## 🧠 Setup Instructions
-
-### Clone the Repository
-```bash
-git clone https://github.com/<your-username>/faculty-suggestions.git
-cd faculty-suggestions
-const APPS_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
-
-faculty-suggestions/
-│
-├── index.html      # Main web page
-├── /assets         # (Optional) Images or icons
-└── README.md       # Documentation
-
 ## 🧰 Example Google Apps Script (Backend)
 
 function doPost(e) {
@@ -73,3 +58,18 @@ Faculty of Computing, Sabaragamuwa University of Sri Lanka
 ## 📬 Feedback
 
 If you encounter issues or have improvement ideas, feel free to open an issue or submit a pull request!
+
+## 🧠 Setup Instructions
+
+### Clone the Repository
+```bash
+git clone https://github.com/<your-username>/faculty-suggestions.git
+cd faculty-suggestions
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+
+faculty-suggestions/
+│
+├── index.html      # Main web page
+├── /assets         # (Optional) Images or icons
+└── README.md       # Documentation 
+
