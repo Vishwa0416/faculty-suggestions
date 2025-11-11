@@ -642,6 +642,13 @@ textarea {
   font-size: 64px;
   margin-bottom: 20px;
   animation: bounce 0.5s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-icon svg {
+  filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.3));
 }
 
 @keyframes bounce {
@@ -679,6 +686,9 @@ textarea {
 }
 
 .btn-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 16px;
   background: #4a90e2;
   color: white;
@@ -691,6 +701,10 @@ textarea {
 
 .btn-copy:hover {
   background: #357abd;
+}
+
+.btn-copy svg {
+  flex-shrink: 0;
 }
 
 .tracking-info {
@@ -1271,6 +1285,18 @@ textarea {
   gap: 10px;
   justify-content: center;
   margin-top: 20px;
+}
+
+/* Search actions buttons with icons */
+.search-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.search-actions .btn svg {
+  flex-shrink: 0;
 }
 
 /* Mobile Responsive */
