@@ -216,7 +216,7 @@ async function submitSuggestion() {
       document.getElementById("trackingId").textContent = trackingId;
       document.getElementById("anonymous-popup").style.display = "flex";
     } else {
-      showPopup("✅ Suggestion delivered — thank you!", 4000, true);
+      showPopup("✓ Suggestion delivered — thank you!", 4000, true);
       setTimeout(() => {
         resetForm();
         // Reset navigation to home
@@ -229,7 +229,7 @@ async function submitSuggestion() {
     submitBtn.textContent = "Send Suggestion";
   } catch (err) {
     console.error(err);
-    showPopup("❌ Network error. Please try again.", 5000, false);
+    showPopup("✗ Network error. Please try again.", 5000, false);
     submitBtn.disabled = false;
     submitBtn.textContent = "Send Suggestion";
   }
@@ -264,10 +264,10 @@ function copyTrackingId() {
   navigator.clipboard
     .writeText(trackingId)
     .then(() => {
-      showPopup("✅ Tracking ID copied to clipboard!", 2000, true);
+      showPopup("✓ Tracking ID copied to clipboard!", 2000, true);
     })
     .catch(() => {
-      showPopup("❌ Failed to copy. Please copy manually.", 3000, false);
+      showPopup("✗ Failed to copy. Please copy manually.", 3000, false);
     });
 }
 
