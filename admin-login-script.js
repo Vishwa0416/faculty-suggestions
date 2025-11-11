@@ -75,6 +75,7 @@ function handleLogin(event) {
   const loginBtn = document.getElementById("loginBtn");
   const errorMessage = document.getElementById("errorMessage");
 
+  // Clear previous errors
   errorMessage.classList.remove("show");
   errorMessage.textContent = "";
 
@@ -83,9 +84,42 @@ function handleLogin(event) {
     return;
   }
 
+  // START LOADING STATE
   loginBtn.disabled = true;
   loginBtn.textContent = "Logging in...";
   loginBtn.classList.add("loading");
+
+  // Disable username input
+  const usernameInput = document.getElementById("username");
+  usernameInput.disabled = true;
+  usernameInput.style.opacity = "0.6";
+
+  // Disable password input
+  const passwordInput = document.getElementById("password");
+  passwordInput.disabled = true;
+  passwordInput.style.opacity = "0.6";
+
+  // Disable toggle password button
+  const togglePasswordBtn = document.querySelector(".toggle-password");
+  if (togglePasswordBtn) {
+    togglePasswordBtn.disabled = true;
+    togglePasswordBtn.style.opacity = "0.5";
+    togglePasswordBtn.style.pointerEvents = "none";
+  }
+
+  // Disable "Forgot Password" link
+  const forgotPasswordLink = document.querySelector(".forgot-password");
+  if (forgotPasswordLink) {
+    forgotPasswordLink.style.pointerEvents = "none";
+    forgotPasswordLink.style.opacity = "0.5";
+  }
+
+  // Disable "Back to Portal" link
+  const backToPortalLink = document.querySelector(".back-to-portal");
+  if (backToPortalLink) {
+    backToPortalLink.style.pointerEvents = "none";
+    backToPortalLink.style.opacity = "0.5";
+  }
 
   setTimeout(() => {
     const admin = ADMIN_ACCOUNTS.find(
@@ -113,9 +147,33 @@ function handleLogin(event) {
         window.location.href = "admin-dashboard.html";
       }, 1000);
     } else {
+      // Re-enable everything on failed login
       loginBtn.disabled = false;
       loginBtn.textContent = "Login";
       loginBtn.classList.remove("loading");
+
+      usernameInput.disabled = false;
+      usernameInput.style.opacity = "";
+
+      passwordInput.disabled = false;
+      passwordInput.style.opacity = "";
+
+      if (togglePasswordBtn) {
+        togglePasswordBtn.disabled = false;
+        togglePasswordBtn.style.opacity = "";
+        togglePasswordBtn.style.pointerEvents = "";
+      }
+
+      if (forgotPasswordLink) {
+        forgotPasswordLink.style.pointerEvents = "";
+        forgotPasswordLink.style.opacity = "";
+      }
+
+      if (backToPortalLink) {
+        backToPortalLink.style.pointerEvents = "";
+        backToPortalLink.style.opacity = "";
+      }
+
       showError("Invalid username or password. Please try again.");
       logFailedAttempt(username);
     }
