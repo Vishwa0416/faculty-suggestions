@@ -5,12 +5,66 @@
     <title>Faculty Suggestions</title>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <link rel="stylesheet" href="styles.css" />
+    <script src="loading-utils.js"></script>
   </head>
   <body>
     <!-- Header -->
     <div class="header">
       <div class="logo">
-        <div class="logo-icon"></div>
+        <div class="logo-icon">
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 48 48"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <!-- Outer Circle -->
+            <circle
+              cx="24"
+              cy="24"
+              r="18"
+              fill="none"
+              stroke="#e0e7ff"
+              stroke-width="3"
+            />
+
+            <!-- Middle Circle -->
+            <circle
+              cx="24"
+              cy="24"
+              r="13"
+              fill="none"
+              stroke="#c7d2fe"
+              stroke-width="3"
+            />
+
+            <!-- Inner Circle -->
+            <circle
+              cx="24"
+              cy="24"
+              r="8"
+              fill="#4f46e5"
+              stroke="#4338ca"
+              stroke-width="2"
+            />
+
+            <!-- Checkmark -->
+            <path
+              d="M19 24L22 27L29 20"
+              stroke="white"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+
+            <!-- Decorative Elements -->
+            <circle cx="24" cy="6" r="2" fill="#10b981" />
+            <circle cx="42" cy="24" r="2" fill="#10b981" />
+            <circle cx="24" cy="42" r="2" fill="#10b981" />
+            <circle cx="6" cy="24" r="2" fill="#10b981" />
+          </svg>
+        </div>
         <span>Faculty Suggestion Portal</span>
       </div>
       <button
@@ -42,22 +96,97 @@
         <div class="home-grid">
           <!-- Submit Suggestion Card -->
           <div class="home-card submit-card">
-            <div class="card-icon">✍️</div>
+            <!-- Submit Card - Blue theme (#4a90e2) -->
+            <div class="card-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M11 4H4C3.46957 4 3.96086 3.78929 2.58579 3.41421C2.21071 3.03914 2 2.53043 2 2V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H20C20.5304 22 21.0391 21.7893 21.4142 21.4142C21.7893 21.0391 22 20.5304 22 20V13"
+                  stroke="#4a90e2"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z"
+                  stroke="#4a90e2"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
             <h3>Submit New Suggestion</h3>
             <p>Share your feedback with the faculty anonymously or publicly</p>
             <div class="role-buttons">
               <button class="btn-role" onclick="chooseRole('Student')">
-                👨‍🎓 I'm a Student
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style="margin-right: 8px"
+                >
+                  <path
+                    d="M12 14L21 9L12 4L3 9L12 14Z"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M12 14V22M16 11.5V16.5C16 17.163 15.7366 17.7989 15.2678 18.2678C14.7989 18.7366 14.163 19 13.5 19H10.5C9.83696 19 9.20107 18.7366 8.73223 18.2678C8.26339 17.7989 8 17.163 8 16.5V11.5"
+                    stroke="white"
+                    stroke-width="2"
+                  />
+                </svg>
+                I'm a Student
               </button>
               <button class="btn-role" onclick="chooseRole('Lecturer')">
-                👨‍🏫 I'm a Lecturer
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style="margin-right: 8px"
+                >
+                  <rect
+                    x="2"
+                    y="3"
+                    width="20"
+                    height="14"
+                    rx="2"
+                    stroke="white"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M8 21H16M12 17V21M7 7H17M7 11H13"
+                    stroke="white"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                I'm a Lecturer
               </button>
             </div>
           </div>
 
           <!-- Track Suggestion Card -->
           <div class="home-card track-card">
-            <div class="card-icon">🔍</div>
+            <!-- Track Card - Green theme (#10b981) -->
+            <div class="card-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="11"
+                  cy="11"
+                  r="8"
+                  stroke="#10b981"
+                  stroke-width="2"
+                />
+                <path
+                  d="M21 21L16.65 16.65"
+                  stroke="#10b981"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
             <h3>Track Your Suggestion</h3>
             <p>Check the status and admin response for your submission</p>
 
@@ -97,7 +226,27 @@
 
           <!-- Generate Report Card -->
           <div class="home-card report-card">
-            <div class="card-icon">📊</div>
+            <!-- Report Card - Orange theme (#f59e0b) -->
+            <div class="card-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M3 3V21H21"
+                  stroke="#f59e0b"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M7 16L12 11L15 14L21 8"
+                  stroke="#f59e0b"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <circle cx="7" cy="16" r="1.5" fill="#f59e0b" />
+                <circle cx="12" cy="11" r="1.5" fill="#f59e0b" />
+                <circle cx="15" cy="14" r="1.5" fill="#f59e0b" />
+                <circle cx="21" cy="8" r="1.5" fill="#f59e0b" />
+              </svg>
+            </div>
             <h3>Download Report</h3>
             <p>View and download admin responses with custom filters</p>
 
@@ -115,7 +264,22 @@
                 <!-- Department Filter -->
                 <div class="filter-group">
                   <label for="filterDepartment">
-                    <span class="filter-icon">🏢</span> Department
+                    <span class="filter-icon">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M3 21H21M3 7L12 3L21 7M5 21V10M19 21V10M9 21V14H15V21"
+                          stroke="#92400e"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Department
                   </label>
                   <select id="filterDepartment" class="filter-select">
                     <option value="all">All Departments</option>
@@ -138,14 +302,62 @@
                 <!-- Date Range Filter -->
                 <div class="filter-group">
                   <label for="filterDateFrom">
-                    <span class="filter-icon">📅</span> From Date
+                    <span class="filter-icon">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <rect
+                          x="3"
+                          y="4"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          stroke="#92400e"
+                          stroke-width="2"
+                        />
+                        <path
+                          d="M16 2V6M8 2V6M3 10H21"
+                          stroke="#92400e"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    From Date
                   </label>
                   <input type="date" id="filterDateFrom" class="filter-input" />
                 </div>
 
                 <div class="filter-group">
                   <label for="filterDateTo">
-                    <span class="filter-icon">📅</span> To Date
+                    <span class="filter-icon">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <rect
+                          x="3"
+                          y="4"
+                          width="18"
+                          height="18"
+                          rx="2"
+                          stroke="#92400e"
+                          stroke-width="2"
+                        />
+                        <path
+                          d="M16 2V6M8 2V6M3 10H21"
+                          stroke="#92400e"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    To Date
                   </label>
                   <input type="date" id="filterDateTo" class="filter-input" />
                 </div>
@@ -153,7 +365,32 @@
                 <!-- Response Type Filter -->
                 <div class="filter-group">
                   <label for="filterType">
-                    <span class="filter-icon">📝</span> Type
+                    <span class="filter-icon">
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                      >
+                        <path
+                          d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15"
+                          stroke="#92400e"
+                          stroke-width="2"
+                        />
+                        <path
+                          d="M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5C15 5.53043 14.7893 6.03914 14.4142 6.41421C14.0391 6.78929 13.5304 7 13 7H11C10.4696 7 9.96086 6.78929 9.58579 6.41421C9.21071 6.03914 9 5.53043 9 5Z"
+                          stroke="#92400e"
+                          stroke-width="2"
+                        />
+                        <path
+                          d="M9 12H15M9 16H15"
+                          stroke="#92400e"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    </span>
+                    Type
                   </label>
                   <select id="filterType" class="filter-select">
                     <option value="all">All Responses</option>
@@ -164,14 +401,68 @@
               </div>
 
               <div class="filter-actions">
+                <!-- Reset Button -->
                 <button class="btn-reset-filters" onclick="resetFilters()">
-                  🔄 Reset
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    style="margin-right: 6px"
+                  >
+                    <path
+                      d="M1 4V10H7"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M23 20V14H17"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M20.49 9C19.96 7.48 19 6.17 17.76 5.17C15.41 3.26 12.16 2.76 9.39 3.96L3 7"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M3.51 15C4.04 16.52 5 17.83 6.24 18.83C8.59 20.74 11.84 21.24 14.61 20.04L21 17"
+                      stroke="white"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Reset
                 </button>
               </div>
             </div>
 
+            <!-- Download Button -->
             <button class="btn-download-report" onclick="downloadReport()">
-              📄 Download Report (PDF)
+              <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                style="margin-right: 6px"
+              >
+                <path
+                  d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <path
+                  d="M14 2V8H20M12 18V12M9 15L12 18L15 15"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Download Report (PDF)
             </button>
 
             <!-- Divider with Tip -->
@@ -199,7 +490,35 @@
             class="dept-card"
             onclick="selectDept(this, 'Department of Business Management', '💼', 'business')"
           >
-            <div class="dept-icon">💼</div>
+            <!-- Business Management - Blue (#3a7bd5) -->
+            <div class="dept-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <rect
+                  x="3"
+                  y="8"
+                  width="7"
+                  height="13"
+                  stroke="#3a7bd5"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <rect
+                  x="14"
+                  y="3"
+                  width="7"
+                  height="18"
+                  stroke="#3a7bd5"
+                  stroke-width="2"
+                  fill="none"
+                />
+                <path
+                  d="M3 21H21"
+                  stroke="#3a7bd5"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
             <h3>Business Management</h3>
             <p>Business education and management practices</p>
           </div>
@@ -208,7 +527,24 @@
             class="dept-card"
             onclick="selectDept(this, 'Department of Accountancy and Finance', '💰', 'accountancy')"
           >
-            <div class="dept-icon">💰</div>
+            <!-- Accountancy & Finance - Red (#ef473a) -->
+            <div class="dept-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="#ef473a"
+                  stroke-width="2"
+                />
+                <path
+                  d="M12 6V12M12 8H14C14.5304 8 15.0391 8.21071 15.4142 8.58579C15.7893 8.96086 16 9.46957 16 10C16 10.5304 15.7893 11.0391 15.4142 11.4142C15.0391 11.7893 14.5304 12 14 12H12M12 12H10C9.46957 12 8.96086 12.2107 8.58579 12.5858C8.21071 12.9609 8 13.4696 8 14C8 14.5304 8.21071 15.0391 8.58579 15.4142C8.96086 15.7893 9.46957 16 10 16H12M12 16V18"
+                  stroke="#ef473a"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
             <h3>Accountancy & Finance</h3>
             <p>Financial education and accountancy programs</p>
           </div>
@@ -217,7 +553,31 @@
             class="dept-card"
             onclick="selectDept(this, 'Department of Marketing Management', '📢', 'marketing')"
           >
-            <div class="dept-icon">📢</div>
+            <!-- Marketing Management - Dark Gray (#2c2c2c) -->
+            <div class="dept-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z"
+                  stroke="#2c2c2c"
+                  stroke-width="2"
+                />
+                <path
+                  d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z"
+                  stroke="#2c2c2c"
+                  stroke-width="2"
+                />
+                <path
+                  d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z"
+                  stroke="#2c2c2c"
+                  stroke-width="2"
+                />
+                <path
+                  d="M8.7 13.7L15.3 17.3M15.3 6.7L8.7 10.3"
+                  stroke="#2c2c2c"
+                  stroke-width="2"
+                />
+              </svg>
+            </div>
             <h3>Marketing Management</h3>
             <p>Marketing curriculum and industry connections</p>
           </div>
@@ -226,7 +586,23 @@
             class="dept-card"
             onclick="selectDept(this, 'Department of Tourism Management', '🌍', 'tourism')"
           >
-            <div class="dept-icon">🌍</div>
+            <!-- Tourism Management - Green (#38ef7d) -->
+            <div class="dept-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="#38ef7d"
+                  stroke-width="2"
+                />
+                <path
+                  d="M2 12H22M12 2C14.5 4.5 16 8 16 12C16 16 14.5 19.5 12 22M12 2C9.5 4.5 8 8 8 12C8 16 9.5 19.5 12 22"
+                  stroke="#38ef7d"
+                  stroke-width="2"
+                />
+              </svg>
+            </div>
             <h3>Tourism Management</h3>
             <p>Tourism and hospitality education</p>
           </div>
@@ -235,7 +611,14 @@
             class="dept-card"
             onclick="selectDept(this, 'Other', '⋯', 'other')"
           >
-            <div class="dept-icon">⋯</div>
+            <!-- Other - Purple (#8e2de2) -->
+            <div class="dept-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                <circle cx="5" cy="12" r="2" fill="#8e2de2" />
+                <circle cx="12" cy="12" r="2" fill="#8e2de2" />
+                <circle cx="19" cy="12" r="2" fill="#8e2de2" />
+              </svg>
+            </div>
             <h3>Other</h3>
             <p>General feedback or other departments</p>
           </div>
@@ -385,14 +768,56 @@
     <!-- Anonymous ID Popup -->
     <div id="anonymous-popup" class="popup-overlay">
       <div class="popup-box anonymous-success">
-        <div class="success-icon">✅</div>
+        <div class="success-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none">
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="#10b981"
+              stroke-width="2"
+              fill="#d1fae5"
+            />
+            <path
+              d="M8 12L11 15L16 9"
+              stroke="#10b981"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
         <h2>Suggestion Submitted Anonymously</h2>
         <p>Your suggestion has been submitted successfully!</p>
         <div class="tracking-id-box">
           <p class="tracking-label">Your Tracking ID:</p>
           <p class="tracking-id" id="trackingId">XXXX-XXXX-XXXX</p>
           <button class="btn-copy" onclick="copyTrackingId()">
-            📋 Copy ID
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              style="margin-right: 6px"
+            >
+              <rect
+                x="9"
+                y="9"
+                width="13"
+                height="13"
+                rx="2"
+                stroke="white"
+                stroke-width="2"
+                fill="none"
+              />
+              <path
+                d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            Copy ID
           </button>
         </div>
         <p class="tracking-info">
@@ -414,7 +839,27 @@
         </div>
         <div class="search-actions">
           <button class="btn" onclick="downloadSearchResults()">
-            📄 Download as PDF
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              style="margin-right: 6px"
+            >
+              <path
+                d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M14 2V8H20M12 18V12M9 15L12 18L15 15"
+                stroke="white"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            Download as PDF
           </button>
           <button
             class="btn secondary"

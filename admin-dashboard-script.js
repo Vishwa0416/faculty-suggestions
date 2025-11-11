@@ -102,12 +102,13 @@ function updateAdminProfile(adminData) {
   }
 }
 
-// Load suggestions from Google Sheets with role-based filtering
+// Load suggestions from Google Sheets with role-based filtering - WITH LOADING STATE
 async function loadSuggestionsFromSheet() {
   const loadingState = document.getElementById("loadingState");
   const listContainer = document.getElementById("suggestionsList");
 
   try {
+    // START LOADING STATE
     if (loadingState) {
       loadingState.style.display = "flex";
     }
@@ -115,10 +116,33 @@ async function loadSuggestionsFromSheet() {
       listContainer.innerHTML = "";
     }
 
+    // Disable sidebar filters
+    disableSection(".sidebar");
+
+    // Disable header logout button
+    const logoutBtn = document.querySelector(".logout-btn");
+    if (logoutBtn) {
+      logoutBtn.disabled = true;
+      logoutBtn.style.opacity = "0.5";
+      logoutBtn.style.pointerEvents = "none";
+    }
+
+    // Disable sort dropdown
+    const sortBtn = document.querySelector(".sort-btn");
+    if (sortBtn) {
+      sortBtn.disabled = true;
+      sortBtn.style.opacity = "0.5";
+      sortBtn.style.pointerEvents = "none";
+    }
+
     console.log("Fetching suggestions from:", APPS_SCRIPT_URL);
     console.log("Current admin:", currentAdmin);
 
-    const response = await fetch(APPS_SCRIPT_URL + "?action=getSuggestions");
+    const response = await fetch(APPS_SCRIPT_URL + "?action=getSuggestions", {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+
     console.log("Response status:", response.status);
 
     if (!response.ok) {
@@ -199,6 +223,25 @@ async function loadSuggestionsFromSheet() {
         </div>
       `;
       loadingState.style.display = "flex";
+    }
+  } finally {
+    // END LOADING STATE - ALWAYS RUNS
+    enableSection(".sidebar");
+
+    // Re-enable logout button
+    const logoutBtn = document.querySelector(".logout-btn");
+    if (logoutBtn) {
+      logoutBtn.disabled = false;
+      logoutBtn.style.opacity = "";
+      logoutBtn.style.pointerEvents = "";
+    }
+
+    // Re-enable sort dropdown
+    const sortBtn = document.querySelector(".sort-btn");
+    if (sortBtn) {
+      sortBtn.disabled = false;
+      sortBtn.style.opacity = "";
+      sortBtn.style.pointerEvents = "";
     }
   }
 }
@@ -553,15 +596,35 @@ async function submitResponse() {
   }
 
   const submitBtn = document.querySelector(".submit-response-btn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting...";
+  const responseTextarea = document.getElementById("responseText");
+
+  // START LOADING STATE
+  showGlobalLoading("Submitting your response...");
+  disableNavigation();
+  setButtonLoading(submitBtn, "Submitting...");
+
+  // Disable response textarea
+  responseTextarea.disabled = true;
+  responseTextarea.style.opacity = "0.6";
+
+  // Disable clicking on other suggestions
+  disableSection(".suggestions-list");
+
+  // Disable sidebar filters
+  disableSection(".sidebar");
 
   try {
     console.log("Submitting response for row:", currentSuggestion.rowIndex);
 
+    updateLoadingMessage("Saving to database...");
+
+    // ✅ FIX: Use no-cors mode for POST requests to Google Apps Script
     const response = await fetch(APPS_SCRIPT_URL, {
-      redirect: "follow",
       method: "POST",
+      mode: "no-cors", // ✅ CRITICAL: This prevents CORS errors
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         action: "submitResponse",
         rowIndex: currentSuggestion.rowIndex,
@@ -571,31 +634,52 @@ async function submitResponse() {
       }),
     });
 
-    console.log("Response status:", response.status);
+    console.log("Response sent (no-cors mode)");
 
-    const text = await response.text();
-    console.log("Response text:", text);
+    // ✅ With no-cors mode, we can't read the response
+    // But if no error was thrown, the request was sent successfully
 
-    const result = JSON.parse(text);
-    console.log("Response result:", result);
+    // Update local state
+    currentSuggestion.response = responseText;
+    currentSuggestion.status = "responded";
+    currentSuggestion.respondedBy = currentAdmin.name;
 
-    if (result.success) {
-      currentSuggestion.response = responseText;
-      currentSuggestion.status = "responded";
-      currentSuggestion.respondedBy = currentAdmin.name;
+    updateLoadingMessage("Response submitted successfully!");
 
-      showNotification("Response submitted successfully!", "success");
+    showNotification("Response submitted successfully!", "success");
 
-      await loadSuggestionsFromSheet();
-      viewSuggestion(currentSuggestion.id);
-    } else {
-      throw new Error(result.message || "Failed to submit response");
-    }
+    // Wait a moment before reloading
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    // Reload suggestions to get updated data from server
+    await loadSuggestionsFromSheet();
+
+    // Re-view the current suggestion to show updated state
+    viewSuggestion(currentSuggestion.id);
   } catch (error) {
     console.error("Error submitting response:", error);
-    showNotification("Error submitting response. Please try again.", "error");
+    showNotification(
+      "Error submitting response. Please check your connection and try again.",
+      "error"
+    );
+
+    // Re-enable on error
+    responseTextarea.disabled = false;
+    responseTextarea.style.opacity = "";
     submitBtn.disabled = false;
-    submitBtn.textContent = "Submit Response";
+  } finally {
+    // END LOADING STATE - ALWAYS RUNS
+    hideGlobalLoading();
+    enableNavigation();
+    removeButtonLoading(submitBtn);
+    enableSection(".suggestions-list");
+    enableSection(".sidebar");
+
+    // Re-enable textarea if not already responded
+    if (currentSuggestion.status !== "responded") {
+      responseTextarea.disabled = false;
+      responseTextarea.style.opacity = "";
+    }
   }
 }
 

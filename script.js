@@ -163,13 +163,14 @@ function generateTrackingId() {
   return `${timestamp}-${random}`.toUpperCase();
 }
 
-// Enhanced submit function with proper navigation
+// Enhanced submit function with proper navigation and loading state
 async function submitSuggestion() {
   const suggestion = document.getElementById("suggestion").value.trim();
   let senderEmail = document.getElementById("senderEmail").value.trim();
   const hp = document.getElementById("hp_field").value;
   const submitBtn = document.getElementById("submitBtn");
 
+  // Validation
   if (hp) {
     showPopup("Spam detected", 4000, false);
     return;
@@ -185,9 +186,20 @@ async function submitSuggestion() {
     return;
   }
 
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Sending...";
-  showPopup("Sending your suggestion...", 2000, true);
+  // START LOADING STATE
+  showGlobalLoading("Submitting your suggestion...");
+  disableNavigation();
+  disableForm(".form-container");
+  setButtonLoading(submitBtn, "Sending...");
+
+  // Disable specific form elements
+  const suggestionTextarea = document.getElementById("suggestion");
+  const emailInput = document.getElementById("senderEmail");
+  const anonymousCheckbox = document.getElementById("anonymousCheck");
+
+  suggestionTextarea.disabled = true;
+  emailInput.disabled = true;
+  anonymousCheckbox.disabled = true;
 
   let trackingId = null;
   if (isAnonymous) {
@@ -196,6 +208,8 @@ async function submitSuggestion() {
   }
 
   try {
+    updateLoadingMessage("Sending to admin panel...");
+
     await fetch(APPS_SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
@@ -211,27 +225,42 @@ async function submitSuggestion() {
       }),
     });
 
+    updateLoadingMessage("Submission successful!");
+
     if (isAnonymous) {
+      // Hide loading before showing popup
+      hideGlobalLoading();
+      enableNavigation();
+
       // Show anonymous popup with tracking ID
       document.getElementById("trackingId").textContent = trackingId;
       document.getElementById("anonymous-popup").style.display = "flex";
     } else {
-      showPopup("✅ Suggestion delivered — thank you!", 4000, true);
-      setTimeout(() => {
-        resetForm();
-        // Reset navigation to home
-        stepHistory = [];
-        showStep(1);
-      }, 2000);
-    }
+      showPopup("✓ Suggestion delivered — thank you!", 4000, true);
 
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Send Suggestion";
+      // Wait before redirecting
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      hideGlobalLoading();
+      resetForm();
+      stepHistory = [];
+      showStep(1);
+    }
   } catch (err) {
-    console.error(err);
-    showPopup("❌ Network error. Please try again.", 5000, false);
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Send Suggestion";
+    console.error("Submission error:", err);
+    showPopup("✗ Network error. Please try again.", 5000, false);
+
+    // Re-enable form on error
+    suggestionTextarea.disabled = false;
+    emailInput.disabled = false;
+    anonymousCheckbox.disabled = false;
+  } finally {
+    // Only run cleanup if not showing anonymous popup
+    if (!isAnonymous) {
+      enableNavigation();
+      enableForm(".form-container");
+      removeButtonLoading(submitBtn);
+    }
   }
 }
 
@@ -264,10 +293,10 @@ function copyTrackingId() {
   navigator.clipboard
     .writeText(trackingId)
     .then(() => {
-      showPopup("✅ Tracking ID copied to clipboard!", 2000, true);
+      showPopup("✓ Tracking ID copied to clipboard!", 2000, true);
     })
     .catch(() => {
-      showPopup("❌ Failed to copy. Please copy manually.", 3000, false);
+      showPopup("✗ Failed to copy. Please copy manually.", 3000, false);
     });
 }
 
@@ -280,10 +309,9 @@ function resetFilters() {
   showPopup("Filters reset", 2000, true);
 }
 
+// Download Report
 async function downloadReport() {
   const downloadBtn = event.target;
-  downloadBtn.disabled = true;
-  downloadBtn.textContent = "Generating...";
 
   // Get filter values
   const filters = {
@@ -294,62 +322,75 @@ async function downloadReport() {
   };
 
   console.log("Applying filters:", filters);
-  showPopup("Generating filtered PDF report...", 3000, true);
+
+  // START LOADING STATE
+  showGlobalLoading("Generating your PDF report...");
+  disableNavigation();
+  disableSection(".report-card");
+  setButtonLoading(downloadBtn, "Generating...");
+
+  // Disable all filter inputs
+  document.getElementById("filterDepartment").disabled = true;
+  document.getElementById("filterDateFrom").disabled = true;
+  document.getElementById("filterDateTo").disabled = true;
+  document.getElementById("filterType").disabled = true;
+
+  // Disable filter buttons
+  const filterButtons = document.querySelectorAll(
+    ".btn-expand-filters, .btn-reset-filters"
+  );
+  filterButtons.forEach((btn) => (btn.disabled = true));
 
   try {
     const url = `${APPS_SCRIPT_URL}?action=getPublicResponses`;
     console.log("Fetching from:", url);
 
+    updateLoadingMessage("Fetching responses from database...");
+
     const response = await fetch(url, {
       method: "GET",
-      headers: {
-        Accept: "application/json",
-      },
+      headers: { Accept: "application/json" },
     });
 
     console.log("Response status:", response.status);
 
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
     console.log("Received data:", data);
 
     if (!data.success) {
-      showPopup(
-        "❌ " + (data.message || "Failed to fetch responses"),
-        3000,
-        false
-      );
-      downloadBtn.disabled = false;
-      downloadBtn.textContent = "📄 Download Filtered Report (PDF)";
-      return;
+      throw new Error(data.message || "Failed to fetch responses");
     }
 
     if (!data.responses || data.responses.length === 0) {
       showPopup("No admin responses available yet", 3000, false);
-      downloadBtn.disabled = false;
-      downloadBtn.textContent = "📄 Download Filtered Report (PDF)";
       return;
     }
+
+    updateLoadingMessage("Applying filters...");
 
     // Apply filters
     let filteredResponses = applyFilters(data.responses, filters);
 
     if (filteredResponses.length === 0) {
       showPopup("No responses match your filters", 3000, false);
-      downloadBtn.disabled = false;
-      downloadBtn.textContent = "📄 Download Filtered Report (PDF)";
       return;
     }
+
+    updateLoadingMessage("Creating PDF document...");
 
     console.log(
       "Generating PDF with",
       filteredResponses.length,
       "filtered responses"
     );
+
+    // Generate PDF (this opens in new window)
     generatePDFReport(filteredResponses, filters);
+
     showPopup(
       `✅ Report generated with ${filteredResponses.length} responses!`,
       2000,
@@ -359,8 +400,20 @@ async function downloadReport() {
     console.error("Error:", error);
     showPopup("❌ Failed to generate report: " + error.message, 4000, false);
   } finally {
-    downloadBtn.disabled = false;
-    downloadBtn.textContent = "📄 Download Filtered Report (PDF)";
+    // END LOADING STATE - ALWAYS RUNS
+    hideGlobalLoading();
+    enableNavigation();
+    enableSection(".report-card");
+    removeButtonLoading(downloadBtn);
+
+    // Re-enable all filter inputs
+    document.getElementById("filterDepartment").disabled = false;
+    document.getElementById("filterDateFrom").disabled = false;
+    document.getElementById("filterDateTo").disabled = false;
+    document.getElementById("filterType").disabled = false;
+
+    // Re-enable filter buttons
+    filterButtons.forEach((btn) => (btn.disabled = false));
   }
 }
 
@@ -755,46 +808,76 @@ function generatePDFReport(responses, filters = null) {
 
 // Search by Tracking ID
 async function searchByTrackingId() {
-  const trackingId = document
-    .getElementById("trackingIdInput")
-    .value.trim()
-    .toUpperCase();
+  const trackingIdInput = document.getElementById("trackingIdInput");
+  const searchBtn = event.target; // Get the clicked button
+  const trackingId = trackingIdInput.value.trim().toUpperCase();
 
   if (!trackingId) {
     showPopup("Please enter a tracking ID", 3000, false);
     return;
   }
 
-  showPopup("Searching...", 2000, true);
+  // START LOADING STATE
+  showGlobalLoading("Searching for your suggestion...");
+  disableNavigation();
+  disableSection(".track-card");
+  setButtonLoading(searchBtn, "Searching...");
+
+  // Disable both search options
+  const emailInput = document.getElementById("emailInput");
+  const allSearchButtons = document.querySelectorAll(".btn-track");
+
+  trackingIdInput.disabled = true;
+  emailInput.disabled = true;
+  allSearchButtons.forEach((btn) => (btn.disabled = true));
 
   try {
     const url = `${APPS_SCRIPT_URL}?action=searchByTrackingId&trackingId=${encodeURIComponent(
       trackingId
     )}`;
-    const response = await fetch(url);
+
+    updateLoadingMessage("Fetching results...");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+
     const data = await response.json();
 
     if (!data.success) {
-      showPopup("❌ " + data.message, 3000, false);
-      return;
+      throw new Error(data.message || "Search failed");
     }
 
     if (data.results.length === 0) {
       showPopup("No suggestion found with this tracking ID", 3000, false);
-      return;
+    } else {
+      currentSearchResults = data.results;
+      displaySearchResults(data.results, "Tracking ID: " + trackingId);
+      showPopup(`Found ${data.results.length} result(s)`, 2000, true);
     }
-
-    currentSearchResults = data.results;
-    displaySearchResults(data.results, "Tracking ID: " + trackingId);
   } catch (error) {
-    console.error(error);
+    console.error("Search error:", error);
     showPopup("❌ Search failed. Please try again.", 3000, false);
+  } finally {
+    // END LOADING STATE - ALWAYS RUNS
+    hideGlobalLoading();
+    enableNavigation();
+    enableSection(".track-card");
+    removeButtonLoading(searchBtn);
+
+    // Re-enable inputs
+    trackingIdInput.disabled = false;
+    emailInput.disabled = false;
+    allSearchButtons.forEach((btn) => (btn.disabled = false));
   }
 }
 
 // Search by Email
 async function searchByEmail() {
-  const email = document.getElementById("emailInput").value.trim();
+  const emailInput = document.getElementById("emailInput");
+  const searchBtn = event.target; // Get the clicked button
+  const email = emailInput.value.trim();
 
   if (!email) {
     showPopup("Please enter an email address", 3000, false);
@@ -808,30 +891,59 @@ async function searchByEmail() {
     return;
   }
 
-  showPopup("Searching...", 2000, true);
+  // START LOADING STATE
+  showGlobalLoading("Searching for your suggestions...");
+  disableNavigation();
+  disableSection(".track-card");
+  setButtonLoading(searchBtn, "Searching...");
+
+  // Disable both search options
+  const trackingIdInput = document.getElementById("trackingIdInput");
+  const allSearchButtons = document.querySelectorAll(".btn-track");
+
+  emailInput.disabled = true;
+  trackingIdInput.disabled = true;
+  allSearchButtons.forEach((btn) => (btn.disabled = true));
 
   try {
     const url = `${APPS_SCRIPT_URL}?action=searchByEmail&email=${encodeURIComponent(
       email
     )}`;
-    const response = await fetch(url);
+
+    updateLoadingMessage("Fetching your suggestions...");
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Accept: "application/json" },
+    });
+
     const data = await response.json();
 
     if (!data.success) {
-      showPopup("❌ " + data.message, 3000, false);
-      return;
+      throw new Error(data.message || "Search failed");
     }
 
     if (data.results.length === 0) {
       showPopup("No suggestions found for this email", 3000, false);
-      return;
+    } else {
+      currentSearchResults = data.results;
+      displaySearchResults(data.results, "Results for: " + email);
+      showPopup(`Found ${data.results.length} suggestion(s)`, 2000, true);
     }
-
-    currentSearchResults = data.results;
-    displaySearchResults(data.results, "Results for: " + email);
   } catch (error) {
-    console.error(error);
+    console.error("Search error:", error);
     showPopup("❌ Search failed. Please try again.", 3000, false);
+  } finally {
+    // END LOADING STATE - ALWAYS RUNS
+    hideGlobalLoading();
+    enableNavigation();
+    enableSection(".track-card");
+    removeButtonLoading(searchBtn);
+
+    // Re-enable inputs
+    emailInput.disabled = false;
+    trackingIdInput.disabled = false;
+    allSearchButtons.forEach((btn) => (btn.disabled = false));
   }
 }
 
